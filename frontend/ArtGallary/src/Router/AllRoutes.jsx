@@ -14,7 +14,7 @@ import Signup from '../pages/Signup/Signup';
 import Login from '../pages/Login/Login';
 import About from '../pages/About/About';
 import Navbar from '../Component/Navbar/Navbar';
-
+import Home from "../pages/Home/Home";
 
 const AllRoutes = () => {
   return (
@@ -33,6 +33,7 @@ const AllRoutes = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
+        <Route path="/" element={<Home/>} />
       </Routes>
     </div>
 
