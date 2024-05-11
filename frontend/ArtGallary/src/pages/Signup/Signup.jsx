@@ -7,30 +7,40 @@ import {
   Heading,
   Input,
   Stack,
+  Text
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
+import { Radio, RadioGroup } from '@chakra-ui/react'
+import { useToast } from '@chakra-ui/react'
+import { color } from "framer-motion";
 
 function Signup() {
+  const [role, setRole] = useState("")
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const toast = useToast();
 
   const Signupbtn = () => {
     navigate("/login");
   };
 
+  const handleRole = (e) => {
+    setRole(e);
+  }
   const handleRegister = (e) => {
     e.preventDefault();
     const payload = {
       username,
       email,
       password,
+      role
     };
 
-    fetch("http://localhost:3000/user/signup", {
+    fetch("https://artgallary.onrender.com/user/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -39,6 +49,8 @@ function Signup() {
     })
       .then((res) => res.json())
       .then((data) => console.log(data))
+      .then(toast({title: "Account created successfully", status: "success", duration: 3000, isClosable: true}))
+      .then(navigate("/login"))
       .catch((err) => console.log(err));
   };
 
@@ -64,6 +76,7 @@ function Signup() {
             <Box as="form" onSubmit={handleRegister}>
               <FormLabel>Enter Your Name</FormLabel>
               <Input
+                required
                 type="text"
                 placeholder="username"
                 boxShadow={
@@ -74,9 +87,18 @@ function Signup() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
+           <Text mt={"20px"} fontSize={"15px"} fontWeight={"600"}>Signup As:</Text>
+               <RadioGroup onChange={handleRole} value={role}>
+      <Stack direction='column'>
+        <Radio 
+        value='artist'>Creator (Individual: Artist or Artisans)</Radio>
+        <Radio
+        value='collector'>Collector:(Organizations, Self Help Groups, Entrepreneurs, NGOs, Galleries, Handicraft Clusters)</Radio>
+      </Stack>
+    </RadioGroup>
 
               <FormLabel>Enter Email address</FormLabel>
-              <Input
+              <Input required
                 type="text"
                 placeholder="email"
                 value={email}
@@ -89,6 +111,7 @@ function Signup() {
               <FormLabel> Enter Password</FormLabel>
               <InputGroup>
                 <Input
+                  required
                   type={showPassword ? "text" : "password"}
                   placeholder="password"
                   value={password}
@@ -98,7 +121,7 @@ function Signup() {
                   border={"none"}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <InputRightElement h={"full"}>
+                <InputRightElement  h={"full"}>
                   <Button
                     variant={"ghost"}
                     onClick={() =>
@@ -118,6 +141,7 @@ function Signup() {
                 >
                 </Stack>
                 <Button
+                  _hover={{ bg: "white",color:"#B79B54" }}
                   backgroundColor={"#B79B54"}
                   variant={"solid"}
                   boxShadow={
@@ -130,6 +154,7 @@ function Signup() {
                   Sign Up
                 </Button>
                 <Button
+                  _hover={{ bg: "#B79B54",color:"white" }}
                   variant={"solid"}
                   border={"2px solid #B79B54"}
                   boxShadow={
