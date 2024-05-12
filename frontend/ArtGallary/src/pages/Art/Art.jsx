@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Box,
@@ -8,64 +8,31 @@ import {
   Grid,
   Flex,
   Skeleton,
-  Button,
-  Badge,
-  useColorModeValue,
-  Center,
-  Avatar,
-  Heading,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  FormLabel,
-  FormControl,
-  Input,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // You can also use <link> for styles
 // ..
 AOS.init();
-const ArtPortfolio = () => {
 
 
+const Art = () => {
   const [arts, setArts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(16);
+  const [itemsPerPage] = useState(15);
   const [totalPages, setTotalPages] = useState(0);
   const [sortBy, setSortBy] = useState("");
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
-  const [username,setUsername] = useState("");
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const initialRef = useRef(null)
-  const finalRef = useRef(null)
-  const[artName, setName]=useState("");
-  const[artPrice, setPrice]=useState(0);
-  const[artId,setArtId] = useState(null);
-  
-  const handleModalOpen= (id,name,price)=>{
-    onOpen();
-    setName(name);
-    setPrice(price);
-    setArtId(id);
-  }
 
   useEffect(() => {
     axios
-      .get("https://artgallary.onrender.com/artist/artPortfolio", {
+      .get("https://artgallary.onrender.com/art", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
-        setUsername(response.data[0].username);
         let sortedArts = response.data;
         if (sortBy === "Newest") {
           sortedArts = sortedArts.sort((a, b) => a.created_at - b.created_at);
@@ -82,56 +49,7 @@ const ArtPortfolio = () => {
         setArts([]);
         setLoading(false);
       });
-  }, [currentPage, token, sortBy,setArts]);
-
-  //To delete
-
-  const handleDelete = async(id) => {
-  
-    try{
-      await axios.delete(`https://artgallary.onrender.com/artist/delete/${id}`,{
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        console.log(response.status)
-        const updatedArts = arts.filter((art) => art._id !== id);
-        setArts(updatedArts);
-      })
-    }
-    catch(error){
-      console.log(error);
-    }
-  }
-
-  //TO update
-  const handleNameChange=((e)=>{
-    setName(e.target.value)
-  })
-
-  const handlePriceChange=((e)=>{
-    setPrice(e.target.value)
-  })
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.patch(`https://artgallary.onrender.com/artist/update/${artId}`, {
-        artName,
-        artPrice
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(response.data);
-      // Update the local state directly without using .then()
-      setArts(arts.map(art => art._id === artId ? { ...art, artName, artPrice } : art));
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  
+  }, [currentPage, token, sortBy]);
 
   useEffect(() => {
     setTotalPages(Math.ceil(arts.length / itemsPerPage));
@@ -169,16 +87,17 @@ const ArtPortfolio = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     return arts.slice(startIndex, endIndex).map((painting) => (
-        // <Link key={painting._id} to={`/art/${painting._id}`}>
+        <Link key={painting._id} to={`/art/${painting._id}`}>
       <Box
-      data-aos="fade-down"
-      data-aos-anchor-placement="top"
         key={painting._id}
         width={"auto"}
         height={"auto"}
         bg="#f5f1ee"
         borderRadius="md"
+        data-aos="zoom-in-down"
+        data-aos-anchor-placement="top"
         boxShadow="md"
+        
       >
         <Image
           width={"100%"}
@@ -187,7 +106,7 @@ const ArtPortfolio = () => {
           alt={painting.artName}
         />
 
-        <Stack pt={5} pr={4} pl={4} pb={5} gap={0} bg={"white"}>
+        <Stack pt={5} pl={4} pb={5} gap={0} bg={"white"}>
           <Text
             fontWeight={400}
             fontSize={"17px"}
@@ -224,50 +143,9 @@ const ArtPortfolio = () => {
           >
             US$ {painting.artPrice}
           </Text>
-          <Button bg={"rgb(183,155,84)"} color={"white"}
-              _hover={{ bg: "#48BB78"}} onClick={()=>handleModalOpen(painting._id,painting.artName,painting.artPrice)}>Edit Details</Button>
-
-      <Modal
-        initialFocusRef={initialRef}
-        finalFocusRef={finalRef}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
-        <ModalOverlay   
-      backdropFilter='auto'
-      backdropInvert='80%'
-      backdropBlur='2px' />
-        <ModalContent>
-          <ModalHeader>Edit Details</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-            <form onSubmit={handleSubmit}>
-              <FormLabel>Name</FormLabel>
-              <Input value={artName} onChange={handleNameChange} ref={initialRef} placeholder='Name of your art' />
-      
-              <FormLabel>Price</FormLabel>
-              <Input value={artPrice} onChange={handlePriceChange} placeholder='Enter your price' />
-           
-            <Button  onClick={onClose} mt={4} type="submit" colorScheme='blue' mr={3}>
-              Save
-            </Button>
-            <Button mt={4} onClick={onClose}>Cancel</Button>
-            </form>
-          </ModalBody>
-          
-
-         
-        </ModalContent>
-          
-      </Modal>
-          <Button margin={"auto"} width={"100%"} bg={"#B79B19"} color={"white"}
-              _hover={{ bg: "#E53E3E"}} onClick= {() => handleDelete(painting._id)} mt={2}>
-            Delete
-          </Button>
         </Stack>
-        
       </Box>
-      // </Link>
+      </Link>
     ));
   };
   const handleSortChange = (event) => {
@@ -275,108 +153,19 @@ const ArtPortfolio = () => {
   };
 
   return (
-    
-    <Box bg="rgb(250,248,244)">  
-     <Center py={6}>
-      <Box
-        maxW={'320px'}
-        w={'full'}
-        bg={useColorModeValue('white', 'gray.900')}
-        boxShadow={'2xl'}
-        rounded={'lg'}
-        p={6}
-        textAlign={'center'}>
-        <Avatar
-          size={'xl'}
-          src={
-            'https://i.pinimg.com/280x280_RS/6b/71/20/6b7120f396928249c8e50953e64d81f5.jpg'
-          }
-          alt={'Avatar Alt'}
-          mb={4}
-          pos={'relative'}
-          _after={{
-            content: '""',
-            w: 4,
-            h: 4,
-            bg: 'green.300',
-            border: '2px solid white',
-            rounded: 'full',
-            pos: 'absolute',
-            bottom: 0,
-            right: 3,
-          }}
-        />
-        <Heading fontSize={'2xl'} fontFamily={'body'}>
-          {username}
-        </Heading>
-        <Text fontWeight={600} color={'gray.500'} mb={4}>
-          @lindsey_jam3s
-        </Text>
-        <Text
-          textAlign={'center'}
-          color={useColorModeValue('gray.700', 'gray.400')}
-          px={3}>
-          Actress, musician, songwriter and artist. PM for work inquires or{' '}
-          <Link href={'#'} color={'blue.400'}>
-            #tag
-          </Link>{' '}
-          me in your posts
-        </Text>
-
-        <Stack align={'center'} justify={'center'} direction={'row'} mt={6}>
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue('gray.50', 'gray.800')}
-            fontWeight={'400'}>
-            #art
-          </Badge>
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue('gray.50', 'gray.800')}
-            fontWeight={'400'}>
-            #photography
-          </Badge>
-          <Badge
-            px={2}
-            py={1}
-            bg={useColorModeValue('gray.50', 'gray.800')}
-            fontWeight={'400'}>
-            #music
-          </Badge>
-        </Stack>
-
-        <Stack mt={8} direction={'row'} spacing={4}>
-          <Button
-            flex={1}
-            fontSize={'sm'}
-            rounded={'full'}
-            _focus={{
-              bg: 'gray.200',
-            }}>
-            Message
-          </Button>
-          <Button
-            flex={1}
-            fontSize={'sm'}
-            rounded={'full'}
-            bg={'blue.400'}
-            color={'white'}
-            boxShadow={
-              '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
-            }
-            _hover={{
-              bg: 'blue.500',
-            }}
-            _focus={{
-              bg: 'blue.500',
-            }}>
-            Follow
-          </Button>
-        </Stack>
-      </Box>
-    </Center>
+    <Box bg="rgb(250,248,244)">
+      <Text
+        pt={8}
+        pl={8}
+        fontWeight={400}
+        fontSize={["20px", "30px", "35px", "40px", "50px"]}
+        fontFamily={"Addington CF"}
+      >
+        Original Contemporary Artworks for Sale
+      </Text>
+      <Flex marginRight={4} justifyContent="flex-end" pt={4} pr={6}>
+        {/* Your sorting select input */}
+      </Flex>
       {loading ? (
         <Grid
           gap={8}
@@ -568,4 +357,4 @@ const ArtPortfolio = () => {
   );
 };
 
-export default ArtPortfolio;
+export default Art;

@@ -19,8 +19,8 @@ const artSchema = new mongoose.Schema(
       required: true,
     },
     artDimension: { type: String, required: true },
-    userID: { type: String, required: true },
-    username: { type: String, required: true },
+    userID: { type: String },
+    username: { type: String},
   },
   {
     versionKey: false,

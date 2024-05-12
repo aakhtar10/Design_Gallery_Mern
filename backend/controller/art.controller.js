@@ -1,19 +1,78 @@
 const { ArtModel } = require("../model/art.model");
+const cloudinary = require("cloudinary").v2;
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+const {uploadImage} = require("./uploadImage");
+cloudinary.config({ 
+  cloud_name: 'dwetm19fr', 
+  api_key: '276842751399855', 
+  api_secret: 'ZauqP9k0AFc9PoLpEpK2_J_KVhw' 
+});
 
+// const postArt = async (req, res) => {
+//   try {
+//     if (req.role == "artist") {
+//       const art = new ArtModel(req.body);
+//       await art.save();
+//       res.status(201).send(art);
+//     } else {
+//       res.status(400).send("Only artist can post art");
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).send("Not able to create art");
+//   }
+// };
+// const postArt = async (req, res) => {
+//   try {
+//     const multipleImage = uploadImage.uploadMultipleImages(req.body.artImage);
+//     const uploadedImages = await multipleImage;
+//     console.log(uploadedImages);
+
+
+//     const newArt = new ArtModel({
+//       artImage: uploadedImages,
+//       artName: req.body.artName,
+//       artCategory: req.body.artCategory,
+//       artPrice: req.body.artPrice,
+//       artDimension: req.body.artDimension,
+//       created_at: req.body.created_at,
+//     });
+
+//     const savedArt = await newArt.save();
+//     res.status(201).json(savedArt);
+//   } catch (error) {
+//     console.error("Error uploading images:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// };
 const postArt = async (req, res) => {
   try {
-    if (req.role == "artist") {
-      const art = new ArtModel(req.body);
-      await art.save();
-      res.status(201).send(art);
-    } else {
-      res.status(400).send("Only artist can post art");
+    if (!req.files || !req.files.artImage) {
+      return res.status(400).json({ error: "No images uploaded" });
     }
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Not able to create art");
+
+    const files = req.files.artImage;
+    const uploadedImages = await Promise.all(files.map(file => uploadImage(file.tempFilePath)));
+
+    const newArt = new ArtModel({
+      artImage: uploadedImages,
+      artName: req.body.artName,
+      artCategory: req.body.artCategory,
+      artPrice: req.body.artPrice,
+      artDimension: req.body.artDimension,
+      created_at: req.body.created_at,
+    });
+
+    const savedArt = await newArt.save();
+    res.status(201).json(savedArt);
+  } catch (error) {
+    console.error("Error uploading images:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 const getArt = async (req, res) => {
   try {
