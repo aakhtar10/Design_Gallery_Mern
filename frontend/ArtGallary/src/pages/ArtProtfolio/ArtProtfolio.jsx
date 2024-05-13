@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { useToast } from '@chakra-ui/react'
 import {
   Box,
   Text,
@@ -18,23 +19,21 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure,
   FormLabel,
-  FormControl,
   Input,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
 
+import {AddIcon} from "@chakra-ui/icons"
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // You can also use <link> for styles
 // ..
 AOS.init();
 const ArtPortfolio = () => {
 
-
+  const toast = useToast()
   const [arts, setArts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(16);
@@ -49,7 +48,79 @@ const ArtPortfolio = () => {
   const[artName, setName]=useState("");
   const[artPrice, setPrice]=useState(0);
   const[artId,setArtId] = useState(null);
+  const [artNamePost, setArtName] = useState('');
+  const [artPricePost, setArtPrice] = useState('');
+  const [artCategory, setArtCategory] = useState('');
+  const [artDimension, setArtDimension] = useState('');
+  const [artImage, setSelectedFiles] = useState([]);
+  const[created_at, setCreatedAt] = useState(0);
+
+  const handleArtNameChange = (e) => {
+    setArtName(e.target.value);
+    console.log(artNamePost);
+  };
+
+const handleCreatedAtChange = (e) => {
+  setCreatedAt(e.target.value);
+  console.log(created_at);
+}
+  const handleArtPriceChange = (e) => {
+    setArtPrice(e.target.value);
+    console.log(artPricePost);
+  };
+
+  const handleArtCategoryChange = (e) => {
+    setArtCategory(e.target.value);
+    console.log(artCategory);
+  };
+
+  const handleArtDimensionChange = (e) => {
+    setArtDimension(e.target.value);
+    console.log(artDimension);
+  };
+
+  const handleFileChange = (e) => {
+    console.log(e);
+    console.log(e.target.files[0]);
+    setSelectedFiles(e.target.files[0]);
+    // setSelectedFiles( Array.from(e.target.files));
+  }
   
+ 
+
+  const handleSubmitPostForm = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/artist/add",
+        {
+          artImage: artImage,
+          artName: artNamePost,
+          artPrice: artPricePost,
+          created_at: created_at,
+          artCategory: artCategory,
+          artDimension: artDimension,
+          
+         
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      console.log(response.data);
+      toast({
+        title: "Art added successfully",
+        status: "success",
+        duration: 3000,
+        isClosable: true
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleModalOpen= (id,name,price)=>{
     onOpen();
     setName(name);
@@ -281,8 +352,7 @@ const ArtPortfolio = () => {
       <Box
         maxW={'320px'}
         w={'full'}
-        bg={useColorModeValue('white', 'gray.900')}
-        boxShadow={'2xl'}
+        bg={"rgb(250,248,244)"}
         rounded={'lg'}
         p={6}
         textAlign={'center'}>
@@ -312,16 +382,6 @@ const ArtPortfolio = () => {
         <Text fontWeight={600} color={'gray.500'} mb={4}>
           @lindsey_jam3s
         </Text>
-        <Text
-          textAlign={'center'}
-          color={useColorModeValue('gray.700', 'gray.400')}
-          px={3}>
-          Actress, musician, songwriter and artist. PM for work inquires or{' '}
-          <Link href={'#'} color={'blue.400'}>
-            #tag
-          </Link>{' '}
-          me in your posts
-        </Text>
 
         <Stack align={'center'} justify={'center'} direction={'row'} mt={6}>
           <Badge
@@ -329,34 +389,25 @@ const ArtPortfolio = () => {
             py={1}
             bg={useColorModeValue('gray.50', 'gray.800')}
             fontWeight={'400'}>
-            #art
+            #artist
           </Badge>
           <Badge
             px={2}
             py={1}
             bg={useColorModeValue('gray.50', 'gray.800')}
             fontWeight={'400'}>
-            #photography
+            #drawing
           </Badge>
           <Badge
             px={2}
             py={1}
             bg={useColorModeValue('gray.50', 'gray.800')}
             fontWeight={'400'}>
-            #music
+            #sketch
           </Badge>
         </Stack>
 
         <Stack mt={8} direction={'row'} spacing={4}>
-          <Button
-            flex={1}
-            fontSize={'sm'}
-            rounded={'full'}
-            _focus={{
-              bg: 'gray.200',
-            }}>
-            Message
-          </Button>
           <Button
             flex={1}
             fontSize={'sm'}
@@ -372,9 +423,40 @@ const ArtPortfolio = () => {
             _focus={{
               bg: 'blue.500',
             }}>
-            Follow
+            Add new art <AddIcon ml={2}/> 
           </Button>
         </Stack>
+        <Box>
+        <form onSubmit={handleSubmitPostForm} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <input type="text" placeholder="Enter art name" value={artNamePost} onChange={handleArtNameChange} />
+      <input type="number" placeholder="Enter price" value={artPricePost} onChange={handleArtPriceChange} />
+      <input type="file" name="artImage"  onChange={handleFileChange} />
+      <input onChange={handleCreatedAtChange} value={created_at}
+  type="number"
+  id="yearInput"
+  name="year"
+  min="1900"
+  max="2099"
+  placeholder="Year of creation"
+/>
+
+      <select id="artCategory" name="artCategory" value={artCategory} onChange={handleArtCategoryChange}>
+        <option value="">Select an option</option>
+        {['Paintings', 'Prints', 'Sculpture', 'Photography', 'Inspiration', 'Drawings'].map((category) => (
+          <option key={category} value={category}>{category}</option>
+        ))}
+      </select>
+      <input
+        type="text"
+        id="artDimension"
+        name="artDimension"
+        value={artDimension}
+        onChange={handleArtDimensionChange}
+        placeholder="Enter art dimensions"
+      />
+      <button type="submit">Submit</button>
+    </form>
+          </Box>
       </Box>
     </Center>
       {loading ? (
