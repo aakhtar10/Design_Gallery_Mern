@@ -26,5 +26,5 @@ app.listen(PORT, async () => {
     console.log(`server is running on port ${PORT}`);
   } catch {
     console.log(err);
-  }
+  } 
 });
