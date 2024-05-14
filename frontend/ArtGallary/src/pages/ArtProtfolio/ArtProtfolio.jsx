@@ -54,58 +54,78 @@ const ArtPortfolio = () => {
   const [artDimension, setArtDimension] = useState('');
   const [artImage, setSelectedFiles] = useState([]);
   const[created_at, setCreatedAt] = useState(0);
+  const[artImagePost, setArtImage] = useState([]);
+  const currentUsername = localStorage.getItem("username");
+  const currentEmail = localStorage.getItem("email");
 
+  const uploadCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset","eyiwtbac");
+    const {data} = await axios.post("https://api.cloudinary.com/v1_1/dwetm19fr/image/upload", formData);
+    return data.url;
+  }
+  const handleUpload = async () => {
+    try{
+       let arr = [];
+       for (let i = 0; i < artImagePost.length; i++) {
+         const data = await uploadCloudinary(artImagePost[i]);
+         arr.push(data);
+       }
+       setSelectedFiles(arr);
+       console.log(artImage);
+    }catch(error){
+        console.log(error);
+    }
+    
+  }
   const handleArtNameChange = (e) => {
     setArtName(e.target.value);
-    console.log(artNamePost);
+  
   };
 
 const handleCreatedAtChange = (e) => {
   setCreatedAt(e.target.value);
-  console.log(created_at);
+  
 }
   const handleArtPriceChange = (e) => {
     setArtPrice(e.target.value);
-    console.log(artPricePost);
+    
   };
 
   const handleArtCategoryChange = (e) => {
     setArtCategory(e.target.value);
-    console.log(artCategory);
+    
   };
 
   const handleArtDimensionChange = (e) => {
     setArtDimension(e.target.value);
-    console.log(artDimension);
+   
   };
 
-  const handleFileChange = (e) => {
-    console.log(e);
-    console.log(e.target.files[0]);
-    setSelectedFiles(e.target.files[0]);
-    // setSelectedFiles( Array.from(e.target.files));
-  }
-  
+ 
  
 
   const handleSubmitPostForm = async (e) => {
     e.preventDefault();
     try {
+      const formData = new FormData();
+      formData.append('artName', artNamePost);
+      formData.append('artPrice', artPricePost);
+      formData.append('created_at', created_at);
+      formData.append('artCategory', artCategory);
+      formData.append('artDimension', artDimension);
+      artImage.forEach((image) => {
+        formData.append(`artImage`, image);
+      });
+
       const response = await axios.post(
         "http://localhost:3000/artist/add",
-        {
-          artImage: artImage,
-          artName: artNamePost,
-          artPrice: artPricePost,
-          created_at: created_at,
-          artCategory: artCategory,
-          artDimension: artDimension,
-          
-         
-        },
+        formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
           }
         }
       );
@@ -130,13 +150,13 @@ const handleCreatedAtChange = (e) => {
 
   useEffect(() => {
     axios
-      .get("https://artgallary.onrender.com/artist/artPortfolio", {
+      .get("http://localhost:3000/artist/artPortfolio", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
-        setUsername(response.data[0].username);
+        
         let sortedArts = response.data;
         if (sortBy === "Newest") {
           sortedArts = sortedArts.sort((a, b) => a.created_at - b.created_at);
@@ -377,10 +397,10 @@ const handleCreatedAtChange = (e) => {
           }}
         />
         <Heading fontSize={'2xl'} fontFamily={'body'}>
-          {username}
+          {currentUsername}
         </Heading>
         <Text fontWeight={600} color={'gray.500'} mb={4}>
-          @lindsey_jam3s
+          {currentEmail}
         </Text>
 
         <Stack align={'center'} justify={'center'} direction={'row'} mt={6}>
@@ -430,7 +450,8 @@ const handleCreatedAtChange = (e) => {
         <form onSubmit={handleSubmitPostForm} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
       <input type="text" placeholder="Enter art name" value={artNamePost} onChange={handleArtNameChange} />
       <input type="number" placeholder="Enter price" value={artPricePost} onChange={handleArtPriceChange} />
-      <input type="file" name="artImage"  onChange={handleFileChange} />
+      <input type="file" name="artImage" multiple   onChange={(e)=>setArtImage(e.target.files)} />
+      <button type="button" onClick={()=>handleUpload()}>Upload</button>
       <input onChange={handleCreatedAtChange} value={created_at}
   type="number"
   id="yearInput"
@@ -442,7 +463,7 @@ const handleCreatedAtChange = (e) => {
 
       <select id="artCategory" name="artCategory" value={artCategory} onChange={handleArtCategoryChange}>
         <option value="">Select an option</option>
-        {['Paintings', 'Prints', 'Sculpture', 'Photography', 'Inspiration', 'Drawings'].map((category) => (
+        {['Painting', 'Print', 'Sculpture', 'Photography', 'Inspiration', 'Drawing'].map((category) => (
           <option key={category} value={category}>{category}</option>
         ))}
       </select>

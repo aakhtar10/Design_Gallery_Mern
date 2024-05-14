@@ -3,7 +3,7 @@ const cloudinary = require("cloudinary").v2;
 const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-const {uploadImage} = require("./uploadImage");
+const {uploadImage, uploadMultipleImages} = require("./uploadImage");
 cloudinary.config({ 
   cloud_name: 'dwetm19fr', 
   api_key: '276842751399855', 
@@ -54,7 +54,7 @@ const postArt = async (req, res) => {
     }
 
     const files = req.files.artImage;
-    const uploadedImages = await Promise.all(files.map(file => uploadImage(file.tempFilePath)));
+    const uploadedImages = await Promise.all(files.map(file => uploadMultipleImages(file.tempFilePath)));
 
     const newArt = new ArtModel({
       artImage: uploadedImages,
@@ -63,6 +63,8 @@ const postArt = async (req, res) => {
       artPrice: req.body.artPrice,
       artDimension: req.body.artDimension,
       created_at: req.body.created_at,
+      userID: req.body.userID,
+      username: req.body.username
     });
 
     const savedArt = await newArt.save();

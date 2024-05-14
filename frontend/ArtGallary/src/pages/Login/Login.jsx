@@ -43,6 +43,8 @@ function Login() {
         if (data.token) {
           toast({title: "Logged in successfully", status: "success", duration: 3000, isClosable: true})
           localStorage.setItem("token", data.token);
+          localStorage.setItem("email", data.email);
+          localStorage.setItem("username", data.username);
           navigate("/");
         } else {
           alert("Invalid email or password");
