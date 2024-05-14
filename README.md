@@ -198,4 +198,4 @@ DELETE /users/id - Delete a user
 - Chakra UI
 - Axios
 - Google Charts
-- JSON server
+- JSON server
