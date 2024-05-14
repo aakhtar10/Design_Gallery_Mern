@@ -2,6 +2,11 @@
 
 Welcome to the Art Gallery MERN Project! This project is designed to provide a platform for artists to showcase their work and for art enthusiasts to explore and purchase artworks.
 
+### Deployed Link:
+
+The project is deployed and accessible at [Art Gallery](https://art-gallary-do7i.vercel.app/). Feel free to visit and explore the art gallery online.
+
+
 ### Features:
 
 1. **User Authentication**: Users can sign up and log in as either an artist or a collector/explorer.
