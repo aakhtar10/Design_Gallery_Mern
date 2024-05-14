@@ -1,0 +1,114 @@
+/* Contact.css */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.contact-us{
+    display: flex;
+   flex-direction: column;
+   flex-wrap: wrap;
+   width: 100%;
+}
+/* contact */
+.contact-us>p{
+    text-align: center;
+    line-height: 2;
+}
+.contact-us {
+    text-align: center;
+  
+  
+    border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.contact-us h1 {
+    color: #333;
+    font-size: 2em;
+    background: rgb(63,94,251);
+    background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(255,0,182,0.6792551249015231) 100%);
+    margin-bottom: 20px;
+}
+
+.contact-us p {
+    color: #666;
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.contact-us p:last-child {
+    margin-bottom: 0;
+}
+
+.info, .form {
+    width: 45%;
+    margin-bottom: 20px;
+    background-image: url(https://img.freepik.com/free-vector/watercolor-oil-painting-background_23-2150146387.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.info {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.info>p{
+    margin-top: 20px;
+    color: rgb(0, 0, 0);
+}
+.info>p>img{
+   width: 50px;
+
+}
+.info>p>strong{
+    font-size: 30px;
+}
+.form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-top: 0;
+}
+h3{
+    font-weight: bold;
+}
+
+input[type="text"], input[type="email"], textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+@media screen and (max-width: 768px) {
+    .info, .form {
+        width: 100%;
+    }
+}
