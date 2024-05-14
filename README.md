@@ -1,201 +1,55 @@
-# Project Title
+**Art Gallery MERN Project**
 
-KATHAN_NEWS
+Welcome to the Art Gallery MERN Project! This project is designed to provide a platform for artists to showcase their work and for art enthusiasts to explore and purchase artworks.
 
-## Introduction
+### Features:
 
-Introducing Kathan News,built for masai construct week block 34 . An innovative online news application offering seamless access to the latest headlines. With user-friendly features including robust registration and authentication, responsive design, and intuitive search capabilities, Kathan News provides an immersive news browsing experience for users worldwide.
+1. **User Authentication**: Users can sign up and log in as either an artist or a collector/explorer.
 
-## Project Type
+2. **Artist Profile**: Artists have their own profiles where they can upload and showcase their artwork, along with a bio and contact information.
 
-Frontend
+3. **Artwork Listings**: Collectors/explorers can browse through a variety of artworks listed on the platform. Each artwork comes with details such as the artist's name, description, price, and images.
 
-## Deplolyed App
+4. **Search and Filter**: Users can search for specific artworks or filter artworks based on criteria such as artist, genre, medium, price, etc.
 
-Frontend: https://kathan-news.netlify.app/ <br>
-Backend: https://code-kathan-api.vercel.app
+5. **Purchase Artworks**: Collectors/explorers can purchase artworks directly from the platform. They can add items to their cart, proceed to checkout, and make payments securely.
 
-## Directory Structure
+6. **Messaging System**: Users can communicate with each other through a messaging system. Collectors/explorers can inquire about artworks, negotiate prices, or discuss commissions with artists.
 
-bash
-code-kathan-2345
-├── backend/
-│   └── .gitignore
-│   └── .prettierrc
-│   ├── api/
-│   │   └── server.js
-│   └── db.json
-│   └── package-lock.json
-│   └── package.json
-│   └── vercel.json
-├── frontend/
-│   └── .gitignore
-│   └── .prettierrc
-│   └── README.md
-│   └── package-lock.json
-│   └── package.json
-│   ├── public/
-│   │   └── favicon.ico
-│   │   └── index.html
-│   │   └── logo192.png
-│   │   └── logo512.png
-│   │   └── manifest.json
-│   │   └── robots.txt
-│   ├── src/
-│   │   └── .prettierrc
-│   │   └── App.css
-│   │   └── App.test.tsx
-│   │   └── App.tsx
-│   │   ├── assets/
-│   │   │   └── .dummy
-│   │   ├── components/
-│   │   │   └── .dummy
-│   │   ├── context/
-│   │   │   └── .dummy
-│   │   ├── hooks/
-│   │   │   └── .dummy
-│   │   └── index.css
-│   │   └── index.tsx
-│   │   └── logo.svg
-│   │   ├── pages/
-│   │   │   └── .dummy
-│   │   │   ├── Admin/
-│   │   │   │   └── Admin.tsx
-│   │   │   ├── Login/
-│   │   │   │   └── Login.tsx
-│   │   │   ├── buisness/
-│   │   │   │   └── Buisness.tsx
-│   │   │   ├── culture/
-│   │   │   │   └── Culture.tsx
-│   │   │   ├── earth/
-│   │   │   │   └── Earth.tsx
-│   │   │   ├── home/
-│   │   │   │   └── Home.tsx
-│   │   │   ├── innovation/
-│   │   │   │   └── Innovation.tsx
-│   │   │   ├── news/
-│   │   │   │   └── News.tsx
-│   │   │   ├── searchPage/
-│   │   │   │   └── SearchPage.tsx
-│   │   │   ├── signup/
-│   │   │   │   └── Signup.tsx
-│   │   │   ├── sports/
-│   │   │   │   └── Sports.tsx
-│   │   │   ├── travel/
-│   │   │   │   └── Travel.tsx
-│   │   │   ├── video/
-│   │   │   │   └── Video.tsx
-│   │   └── react-app-env.d.ts
-│   │   ├── redux/
-│   │   │   └── .dummy
-│   │   └── reportWebVitals.ts
-│   │   ├── routes/
-│   │   │   └── .dummy
-│   │   │   └── Allroutes.tsx
-│   │   │   └── ProtectedRoutes.tsx
-│   │   └── setupTests.ts
-│   │   ├── utils/
-│   │   │   └── .dummy
-│   │   │   ├── baseUrl/
-│   │   │   │   └── index.ts
-│   │   │   ├── layoutRoute/
-│   │   │   │   └── index.ts
-│   └── tsconfig.json
-└── package.json
-└── .DS_Store
-└── .gitignore
-└── README.md
+### Technologies Used:
 
+This project is built using the MERN stack, which stands for MongoDB, Express.js, React.js, and Node.js. Here's a brief overview of the technologies used:
 
-## Video Walkthrough of the project
+- **MongoDB**: NoSQL database used to store user data, artwork information, and transaction details.
+  
+- **Express.js**: Web application framework for Node.js used to build the backend server and API endpoints.
+  
+- **React.js**: JavaScript library used for building the user interface and creating interactive components.
+  
+- **Node.js**: JavaScript runtime environment used for running the server-side code.
 
-[Project Presentation Video](https://youtu.be/a-GFdCgTQms)
+### Installation:
 
-## Features
+To run the project locally, follow these steps:
 
-- User and admin registration and authentication functionality
-- Responsive design for seamless user experience across devices
-- User profile creation and management
-- Search functionality to easily find desired news articles
-- Scroll-to-top feature for convenient navigation 
-- admin dashboard displays metrics of user distribution across the globe , total clicks reseived on the website and other key information
-- ability for the admin to perform crud on news articles and users 
+1. Clone the repository: `https://github.com/aakhtar10/Design_Gallery_Mern.git`
+2. Navigate to the project directory: `cd art-gallery`
+3. Install dependencies for both the backend and frontend:
+   - Backend: `cd backend && npm install`
+   - Frontend: `cd frontend, cd ArtGallery && npm install`
+4. Set up environment variables:
+   - Create a `.env` file in the `backend` directory.
+   - Define variables such as `MONGODB_URI` for connecting to MongoDB, `JWT_SECRET` for JWT authentication, etc.
+5. Start the backend server: `npm run server` inside the `backend` directory.
+6. Start the frontend development server: `npm run dev` inside the `frontend` directory.
+7. Open your browser and navigate to `http://localhost:3000` to view the application.
 
-## design decisions or assumptions
+### Contributing:
 
-At Kathan News, we're committed to delivering an exceptional user experience that seamlessly combines aesthetic appeal with functionality. To achieve this goal, we've implemented two key features: an attractive user interface with toggling theme and interactive toast functionality.
+Contributions to the project are welcome! If you have any ideas for new features, bug fixes, or improvements, feel free to open an issue or submit a pull request.
 
-Intuitive Theming for Enhanced Visual Experience
+### Credits:
 
-Design Goal: Our primary objective is to offer users a visually engaging experience that aligns with their preferences and surroundings.
+This project was built by Azad Ansari and Arsalan Akhtar. Special thanks to both for their dedication and effort in bringing this project to life.
+### License:
 
-Solution: We've integrated a sleek theming system that allows users to effortlessly switch between light and dark modes. Whether users prefer a brighter interface for daytime browsing or a darker one for nighttime reading, they can easily toggle between the two options with a simple click.
-
-## Installation & Getting started
-
-Detailed instructions on how to install, configure, and get the project running.
-bash
-clone the repo
-cd into Code-kathan-2345
-npm run install
-npm run start_fe to start the frontend
-
-
-
-
-## Usage
-
-Provide instructions and examples on how to use your project.
-
-bash
-npm install
-npm run start_fe
-npm run start_be
-
-
-#### Light Mode
-
-[![light theme](./frontend/src//assets/img1.png)](<[link_url](https://code-kathan.vercel.app/)>)
-
-#### Dark Mode
-
-[![dark theme](./frontend/src//assets/img2.png)](<[link_url](https://code-kathan.vercel.app/)>)
-
-#### Light Theme
-
-## Credentials
-
-Admin Credentials
-
-bash
-email- admin@mail.com
-password- admin
-
-
-User Credential
-
-Bash
-email- user@mail.com
-password- password
-
-
-
-## API Endpoints
-
-GET /posts - retrieve all items
-POST /posts - create a new item
-PATCH /posts/:id - Patch an item 
-DELETE /posts/:id  - Delete an item
-POST /sign - sign in a user
-POST /register - create a user account
-PATCH /users/id - Patch a user
-DELETE /users/id - Delete a user
-
-## Technology Stack
-
-- React
-- TypeScript
-- Chakra UI
-- Axios
-- Google Charts
-- JSON server
