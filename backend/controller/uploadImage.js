@@ -1,39 +1,39 @@
 const cloudinary = require("cloudinary").v2;
-cloudinary.config({ 
-    cloud_name: 'dwetm19fr', 
-    api_key: '276842751399855', 
-    api_secret: 'ZauqP9k0AFc9PoLpEpK2_J_KVhw' 
+
+cloudinary.config({
+  cloud_name: "dwetm19fr",
+  api_key: "276842751399855",
+  api_secret: "ZauqP9k0AFc9PoLpEpK2_J_KVhw",
 });
 
-const opts = {
-    overwrite: true,
-    invalidate: true,
-    resource_type: "auto"
+const uploadImageToCloudinary = async (filePath, folder, height, quality) => {
+  const options = { folder };
+  if (height) options.height = height;
+  if (quality) options.quality = quality;
+  options.resource_type = "auto";
+
+  try {
+    return await cloudinary.uploader.upload(filePath, options);
+  } catch (error) {
+    console.log("Error while uploading image:", error);
+    throw error;
+  }
 };
 
-// Function to upload a single image
-const uploadImage = (image) => {
-    return new Promise((resolve, reject) => {
-        cloudinary.uploader.upload(image, opts, (err, result) => {
-            if (result && result.secure_url) {
-                console.log(result.secure_url);
-                resolve(result.secure_url);
-            } else {
-                console.log(err);
-                reject(err);
-            }
-        });
-    });
+const deleteResourceFromCloudinary = async (url) => {
+  if (!url) return;
+
+  try {
+    const result = await cloudinary.uploader.destroy(url);
+    console.log(`Deleted resource with public ID: ${url}`);
+    return result;
+  } catch (error) {
+    console.error(`Error deleting resource with public ID ${url}:`, error);
+    throw error;
+  }
 };
 
-// Function to upload multiple images
-const uploadMultipleImages = (images) => {
-    return new Promise((resolve, reject) => {
-        const uploads = images.map((image) => uploadImage(image));
-        Promise.all(uploads)
-            .then((values) => resolve(values))
-            .catch((err) => reject(err));
-    });
+module.exports = {
+  uploadImageToCloudinary,
+  deleteResourceFromCloudinary,
 };
-
-module.exports = { uploadImage, uploadMultipleImages };

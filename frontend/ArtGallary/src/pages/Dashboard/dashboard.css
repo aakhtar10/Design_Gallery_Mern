@@ -1,0 +1,132 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f1ee;
+  }
+  .container{
+    height: auto;
+    max-width: 100%;
+     background-color: #f5f1ee;
+   
+  }
+
+.main{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-around;
+    gap: 10px;
+    margin-top: 30px;
+}
+.box1{
+     width: 400px;
+    padding: 30px;
+    height: 200px;
+}
+.box{
+    height: auto;
+
+}
+.box2{
+
+   height: auto;
+
+}
+
+.category{
+    margin-top: 40px;
+    display: grid ;
+    grid-template-columns: repeat(3,1fr);
+    gap: 20px;
+    margin-left: 20px;
+ 
+}
+.cat{
+    height: 300px;
+    width: 300px;
+   
+}
+.main-2{
+    margin-top: 90px;
+}
+.img>img{
+    height: 300px;
+}
+
+.box1 {
+  transition: transform 0.3s ease;
+}
+
+.box1:hover {
+  transform: scale(1.1);
+}
+
+
+
+/* Media query for smaller screens */
+@media screen and (max-width: 1000px) {
+    .main {
+        flex-direction: column; /* Revert to row layout for larger screens */
+        justify-content:space-between;
+        margin-left: 90px;
+       
+      }
+    
+      .box1 {
+        height: 200px; /* Restore fixed height for box1 */
+        width: 600px;
+      }
+      .box1>p{
+        display: none;
+      }
+      .box1>h1{
+       margin-left:90px;
+      }
+
+    
+      .category {
+        grid-template-columns: repeat(2, 1fr); /* Keep 3 columns for larger screens */
+       /* margin-left: 10px; */
+       
+      }
+  }
+@media screen and (max-width: 750px) {
+    .main {
+        flex-direction: column; /* Revert to row layout for larger screens */
+        justify-content: space-around;
+      }
+    
+      .box1 {
+        height: 200px; /* Restore fixed height for box1 */
+  
+      }
+    
+    
+      .category {
+        grid-template-columns: repeat(2, 1fr); /* Keep 3 columns for larger screens */
+       margin-left: 10px;
+      }
+  }
+@media screen and (max-width: 500px) {
+    .main {
+        flex-direction: column; /* Revert to row layout for larger screens */
+        justify-content: space-around;
+      }
+    
+      .box1 {
+        height: 200px; /* Restore fixed height for box1 */
+      }
+      .box1>h1{
+       width: 600px;
+     margin-left: -230px;
+      }
+      .box2>img{
+       width: 370px;
+       margin-left: -50px;
+      }
+    
+      .category {
+        grid-template-columns: repeat(1, 1fr); /* Keep 3 columns for larger screens */
+       /* margin-left: 50px; */
+      }
+  }

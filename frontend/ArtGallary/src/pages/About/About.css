@@ -1,0 +1,104 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  header {
+    color: #fff;
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgb(238, 191, 19) 0%, rgba(9, 9, 121, 1) 35%, rgb(12, 203, 241) 100%);
+    padding: 15px;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .hero-image {
+    background-image: url('https://img.freepik.com/free-photo/multi-colored-creativity-close-up-human-eye-generated-by-ai_188544-15574.jpg?size=626&ext=jpg&ga=GA1.1.553209589.1715212800&semt=sph'); /* Update the path to your image */
+    background-size: cover;
+    background-position: center;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .hero-text {
+    color: white;
+    text-align: center;
+  }
+  
+  .hero-text h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+  }
+  
+  .hero-text p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: rgb(250,248,244);
+    padding: 20px;
+  }
+  
+  .container h1 {
+    margin-top: 20px;
+    font-size: 39px;
+   text-align: center;
+   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+  
+  .container p {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    margin-bottom: 30px;
+   
+  }
+  
+  footer {
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(108, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+
+  
+  /* Media Queries */
+  @media only screen and (max-width: 950px) {
+    .search-navbar {
+      display: none;
+    }
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .main-nav {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .last {
+      margin-top: 10px;
+    }
+  }
+  
