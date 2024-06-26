@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useToast } from "@chakra-ui/react";
+import { FormControl, Select, useToast } from "@chakra-ui/react";
 import {
   Box,
   Text,
@@ -35,6 +35,8 @@ import { API } from "../../API/api";
 AOS.init();
 const ArtPortfolio = () => {
   const toast = useToast();
+  const [showModal, setShowModal] = useState(false);
+
   const [arts, setArts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(16);
@@ -45,6 +47,7 @@ const ArtPortfolio = () => {
   const [username, setUsername] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = useRef(null);
+
   const finalRef = useRef(null);
   const [artName, setName] = useState("");
   const [artPrice, setPrice] = useState(0);
@@ -90,31 +93,38 @@ const ArtPortfolio = () => {
   const handleSubmitPostForm = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `${API}/artist/add`,
-        {
-          artImage: artImage,
-          artName: artNamePost,
-          artPrice: artPricePost,
-          created_at: created_at,
-          artCategory: artCategory,
-          artDimension: artDimension,
+      const formData = new FormData();
+      formData.append("artImage", artImage);
+      formData.append("artName", artNamePost);
+      formData.append("artPrice", artPricePost);
+      formData.append("artCategory", artCategory);
+      formData.append("created_at", created_at);
+      formData.append("artDimension", artDimension);
+
+      const response = await axios.post(`${API}/artist/add`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      });
+      getAllArt();
       console.log(response.data);
+
       toast({
         title: "Art added successfully",
         status: "success",
         duration: 3000,
         isClosable: true,
       });
+      setShowModal(false);
     } catch (error) {
       console.error(error);
+      toast({
+        title: "Error adding art",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -124,8 +134,7 @@ const ArtPortfolio = () => {
     setPrice(price);
     setArtId(id);
   };
-
-  useEffect(() => {
+  function getAllArt() {
     axios
       .get(`${API}/artist/artPortfolio`, {
         headers: {
@@ -152,8 +161,11 @@ const ArtPortfolio = () => {
         setArts([]);
         setLoading(false);
       });
+  }
+  useEffect(() => {
+    getAllArt();
   }, [currentPage, token, sortBy, setArts]);
-  console.log("role", role);
+  // console.log("role", role);
 
   const handleDelete = async (id) => {
     try {
@@ -238,6 +250,7 @@ const ArtPortfolio = () => {
     return buttons;
   };
 
+  
   const renderArtCards = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -373,7 +386,6 @@ const ArtPortfolio = () => {
   const handleSortChange = (event) => {
     setSortBy(event.target.value);
   };
-  const email = localStorage.getItem("username");
   return (
     <Box bg="rgb(250,248,244)">
       <Center py={6}>
@@ -385,34 +397,28 @@ const ArtPortfolio = () => {
           p={6}
           textAlign={"center"}
         >
-          <Avatar
-            size={"xl"}
-            src={
-              "https://i.pinimg.com/280x280_RS/6b/71/20/6b7120f396928249c8e50953e64d81f5.jpg"
-            }
-            alt={"Avatar Alt"}
-            mb={4}
-            pos={"relative"}
-            _after={{
-              content: '""',
-              w: 4,
-              h: 4,
-              bg: "green.300",
-              border: "2px solid white",
-              rounded: "full",
-              pos: "absolute",
-              bottom: 0,
-              right: 3,
-            }}
-          />
-          <Heading fontSize={"28px"} fontWeight={600} fontFamily={"body"}>
-            {/* {username} */}
-          </Heading>
-          <Text fontWeight={600} color={"gray.500"} mb={4}>
-            {email}
-          </Text>
+          <Avatar size="xl" name={username} />
+          {role === "artist" ? (
+            <Heading
+              pt={4}
+              fontSize={["sm", "xl", "2xl"]}
+              fontWeight={600}
+              fontFamily={"body"}
+            >
+              {username}'s Art Portfolio
+            </Heading>
+          ) : (
+            <Heading
+              pt={4}
+              fontSize={["sm", "xl", "2xl"]}
+              fontWeight={600}
+              fontFamily={"body"}
+            >
+              {username}
+            </Heading>
+          )}
 
-          <Stack align={"center"} justify={"center"} direction={"row"} mt={6}>
+          <Stack align={"center"} justify={"center"} direction={"row"} mt={4}>
             <Badge
               px={2}
               py={1}
@@ -456,11 +462,9 @@ const ArtPortfolio = () => {
                 _focus={{
                   bg: "blue.500",
                 }}
-                onClick={() => {
-                  setShow((prev) => !prev);
-                }}
+                onClick={() => setShowModal(true)}
               >
-                Add new art <AddIcon ml={2} />
+                Add Art <AddIcon ml={2} />
               </Button>
             </Stack>
           )}
@@ -545,7 +549,7 @@ const ArtPortfolio = () => {
           gap={8}
           p={8}
           templateColumns={[
-            "repeat(2, 1fr)",
+            "repeat(1, 1fr)",
             "repeat(2, 1fr)",
             "repeat(3, 1fr)",
             "repeat(4, 1fr)",
@@ -612,7 +616,7 @@ const ArtPortfolio = () => {
             gap={8}
             p={8}
             templateColumns={[
-              "repeat(2, 1fr)",
+              "repeat(1, 1fr)",
               "repeat(2, 1fr)",
               "repeat(3, 1fr)",
               "repeat(4, 1fr)",
@@ -646,6 +650,86 @@ const ArtPortfolio = () => {
         fontFamily={"sans-serif"}
         textAlign={"center"}
       >
+        <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Add New Art</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <form onSubmit={handleSubmitPostForm}>
+                <FormControl>
+                  <FormLabel>Name</FormLabel>
+                  <Input
+                    type="text"
+                    placeholder="Enter art name"
+                    value={artNamePost}
+                    onChange={(e) => setArtName(e.target.value)}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Price</FormLabel>
+                  <Input
+                    type="number"
+                    placeholder="Enter price"
+                    value={artPricePost}
+                    onChange={(e) => setArtPrice(e.target.value)}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    value={artCategory}
+                    onChange={(e) => setArtCategory(e.target.value)}
+                    placeholder="Select category"
+                  >
+                    {[
+                      "Painting",
+                      "Print",
+                      "Sculpture",
+                      "Photography",
+                      "Inspiration",
+                      "Drawing",
+                      "Acrylic",
+                    ].map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Created_At</FormLabel>
+                  <Input
+                    type="number"
+                    value={created_at}
+                    onChange={(e) => setCreatedAt(e.target.value)}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Dimension</FormLabel>
+                  <Input
+                    type="text"
+                    placeholder="Enter art dimensions"
+                    value={artDimension}
+                    onChange={(e) => setArtDimension(e.target.value)}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Image</FormLabel>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                </FormControl>
+                <Button type="submit" mt={4} colorScheme="blue">
+                  Submit
+                </Button>
+              </form>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+
         <Text pb={4}>
           Original, hand-picked contemporary paintings for sale from the finest
           artists around the world. The Artling offers a curated selection of
